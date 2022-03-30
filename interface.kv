@@ -1,0 +1,1270 @@
+# https://stackoverflow.com/questions/65698145/kivymd-tab-name-containing-icons-and-text
+# this import will prevent disappear tabs through some clicks on them)))
+#:import md_icons kivymd.icon_definitions.md_icons
+#:import fonts kivymd.font_definitions.fonts
+
+<ContentNavigationDrawer>
+    orientation: "vertical"
+    padding: "8dp"
+    spacing: "8dp"
+
+    AnchorLayout:
+        size_hint_y: None
+        height: avatar.height
+
+        Image:
+            id: avatar
+            size_hint: None, None
+            size: "100dp", "100dp"
+            source: "data/icon.png"
+			pos_hint: {"center_x": .5}
+
+    MDLabel:
+        text: "Кафе на Кузнецова"
+        font_style: "Button"
+        size_hint_y: None
+        height: self.texture_size[1]
+		halign: "center"
+
+    MDLabel:
+        text: 'kafenakyznecova@gmail.com'
+        font_style: "Caption"
+        size_hint_y: None
+        height: self.texture_size[1]
+		halign: "center"
+
+    MDLabel:
+        text: '+380995355675, +38067_________'
+        font_style: "Caption"
+        size_hint_y: None
+        height: self.texture_size[1]
+		halign: "center"
+
+    RecycleView:
+    
+        MDList:
+
+            OneLineIconListItem:
+                text: "Пересчёт"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "Пересчёт"
+                IconLeftWidget:
+                    icon: 'calculator'
+
+
+            OneLineIconListItem:
+                text: "Подсчёт купюр"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "Подсчёткупюр"
+                IconLeftWidget:
+                    icon: 'account-cash-outline'
+        
+            OneLineIconListItem:
+                text: "Сводка"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "сводка"
+                IconLeftWidget:
+                    icon: 'dock-top'
+
+            OneLineIconListItem:
+                text: "Конверты"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "конверты"
+                IconLeftWidget:
+                    icon: 'email-newsletter'
+        
+            OneLineIconListItem:
+                text: "Поставщики"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "Поставщики"
+                IconLeftWidget:
+                    icon: 'card-account-phone'
+
+            OneLineIconListItem:
+                text: "Пора на море"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "море"
+                IconLeftWidget:
+                    icon: 'beach'
+
+    MDLabel:
+        text: 'by BrAlSe  "ver: beta_1.0"'
+        font_style: "Caption"
+        size_hint_y: None
+        height: self.texture_size[1]
+		halign: "center"
+
+
+    
+<Tab>
+
+    MDIconButton:
+        id: icon
+        icon: root.icon
+		user_font_size: "48sp"
+        pos_hint: {"center_x": .5, "center_y": .5}
+                    
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+
+
+<ContentTovar>
+    orientation: "vertical"
+    size_hint_y: None
+    height: "50dp"
+
+    MDBoxLayout:
+        
+        MDLabel:
+            text: root.naz
+                
+        MDLabel:
+            id: tovar_col
+            text: "? по"
+            size_hint_x: .6
+            halign: "center"
+                
+        MDTextField:
+            id: tovar_cena
+            text: root.cena
+            pos_hint: {"center_y": .5}
+            size_hint_x: .3
+            on_focus: app.calc_tovar(root.ind)
+            
+        MDLabel:
+            id: tovar_sum
+            text: "сумма"
+            size_hint_x: .6
+            halign: "right"
+                
+    MDTextField:
+        id: tovar_field
+        text: root.tvod
+        on_focus: app.calc_tovar(root.ind)
+
+
+<Content_Postavka>
+
+    text: root.cont_org
+    secondary_text: root.cont_name
+    tertiary_text: root.cont_phone1
+    on_press: app.upgrade_cont(root.cont_ind)
+        
+    IconLeftWidget:
+        icon: "account-tie-outline"
+
+<MDFloatingActionButton>
+
+    size_hint: None, None 
+    size: dp(56), dp(56) 
+    md_bg_color: app.color_toolbar
+    opposite_colors: True  # иконка белого/черного цветов 
+    elevation_normal: 8  # длинна тени 
+
+<IconListItem>
+
+    IconLeftWidget:
+        icon: root.icon
+
+MDScreen:
+
+    MDNavigationLayout:
+        x: toolbar.height
+
+        ScreenManager:
+            id: screen_manager
+
+            MDScreen:
+                name: "Пересчёт"
+            
+                MDBoxLayout:
+                    orientation: "vertical"
+
+					MDToolbar:
+						id: toolbar
+						title: "Пересчёт"
+						elevation: 10
+						height: "58dp"
+						md_bg_color: get_color_from_hex(app.color_toolbar)
+						specific_text_color: get_color_from_hex(app.color_title)
+						left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+						right_action_items: [["microsoft-word" , lambda x: app.on_menu_right()]]
+
+                    MDTabs:
+                        id: tabs
+                        height: "48dp"                      # высота вкладок
+                        tab_indicator_anim: False           # анимация false - отключина
+                        background_color: get_color_from_hex(app.color_tab)  # цвет вкладок
+						text_color_active: get_color_from_hex("#000000") # цвет надписи активной вкладки
+                        
+                        Tab:
+                            id: tab1
+                            name: 'tab1'
+                            text: f"[size=55][font={fonts[-1]['fn_regular']}]{md_icons['calculator']}[/size][/font] пересменка"
+
+                            BoxLayout:
+                                orientation: 'vertical'
+                                   
+                                MDBoxLayout:
+                                    orientation: 'horizontal'
+                                    size_hint_y: .13
+                                    md_bg_color: get_color_from_hex(app.color_bar)
+                                        
+                                    MDIconButton:
+                                        icon: "account-switch"
+                                        
+                                    MDTextField:
+                                        id: barmen
+                                        hint_text: 'пересменка'
+										icon_right: "arrow-down-drop-circle-outline"
+										icon_right_color: app.theme_cls.disabled_hint_text_color
+                                        pos_hint: {"center_y": .4}
+                                        on_focus: if self.focus: app.menu.open()
+                                 
+                                    MDFillRoundFlatIconButton:
+                                        id: start_date
+                                        icon: "calendar-month"
+                                        anchor_y: 'bottom'
+                                        halign: "right"
+                                        pos_hint: {"center_y": .5}
+                                        theme_text_color: "Custom"
+                                        text_color: 0, 0, 0, 1
+                                        line_color: 0, 0, 0, 1
+                                        icon_color: 0, 0, 0, 1
+                                        md_bg_color: get_color_from_hex(app.color_bar)
+                                        on_release: app.date_dialog()
+                                         
+                                BoxLayout:
+                                    orientation: 'vertical'
+                                    padding: "10dp"
+                                
+                                    MDBoxLayout:
+                                        orientation: "horizontal"
+                                        md_bg_color: 0.2, 0.2, 0.2, 0.2
+                                        
+                                        MDIconButton:
+                                            icon: "beer-outline"
+											pos_hint: {"center_y": .5}
+                                        
+                                        MDLabel:
+                                            text: "Водка:"
+                                            
+                                        MDLabel:
+                                            id: vodka_summa
+                                            text: "сумма"
+                                            halign: "center"
+                                            size_hint_x: .6
+                                        
+                                    MDBoxLayout:
+                                        orientation: "horizontal"
+                                        
+                                        MDIconButton:
+                                            icon: "delete-variant"
+											pos_hint: {"center_y": .5}
+                                        
+                                        MDLabel:
+                                            text: "Коньяк:"
+                                            
+                                        MDLabel:
+                                            id: cognac_summa
+                                            text: "сумма"
+                                            halign: "center"
+                                            size_hint_x: .6
+                                            
+                                    MDBoxLayout:
+                                        orientation: "horizontal"
+                                        md_bg_color: 0.2, 0.2, 0.2, 0.2
+                                        
+                                        MDIconButton:
+                                            icon: "glass-cocktail"
+											pos_hint: {"center_y": .5}
+                                        
+                                        MDLabel:
+                                            text: "Ликёр,Вермут:"
+                                            
+                                        MDLabel:
+                                            id: liquor_summa
+                                            text: "сумма"
+                                            halign: "center"
+                                            size_hint_x: .6
+                                            
+                                    MDBoxLayout:
+                                        orientation: "horizontal"
+                                        
+                                        MDIconButton:
+                                            icon: "bottle-soda-classic"
+											pos_hint: {"center_y": .5}
+                                        
+                                        MDLabel:
+                                            text: "Слабоалкоголка:"
+                                            
+                                        MDLabel:
+                                            id: low_alcohol_summa
+                                            text: "сумма"
+                                            halign: "center"
+                                            size_hint_x: .6
+                                            
+                                    MDBoxLayout:
+                                        orientation: "horizontal"
+                                        md_bg_color: 0.2, 0.2, 0.2, 0.2
+                                        
+                                        MDIconButton:
+                                            icon: "glass-wine"
+											pos_hint: {"center_y": .5}
+                                        
+                                        MDLabel:
+                                            text: "Вино,Шампанское:"
+                                            
+                                        MDLabel:
+                                            id: wine_summa
+                                            text: "сумма"
+                                            halign: "center"
+                                            size_hint_x: .6
+                                            
+                                    MDBoxLayout:
+                                        orientation: "horizontal"
+                                        
+                                        MDIconButton:
+                                            icon: "glass-mug-variant"
+											pos_hint: {"center_y": .5}
+                                        
+                                        MDLabel:
+                                            text: "Пиво:"
+                                        
+                                        MDLabel:
+                                            id: beer_summa
+                                            text: "сумма"
+                                            halign: "center"
+                                            size_hint_x: .6
+                                            
+                                    MDBoxLayout:
+                                        orientation: "horizontal"
+                                        md_bg_color: 0.2, 0.2, 0.2, 0.2
+                                        
+                                        MDIconButton:
+                                            icon: "fish"
+											pos_hint: {"center_y": .5}
+                                        
+                                        MDLabel:
+                                            text: "к Пиву:"
+                                            
+                                        MDLabel:
+                                            id: k_beer_summa
+                                            text: "сумма"
+                                            halign: "center"
+                                            size_hint_x: .6
+                                            
+                                    MDBoxLayout:
+                                        orientation: "horizontal"
+                                        
+                                        MDIconButton:
+                                            icon: "cup-water"
+											pos_hint: {"center_y": .5}
+                                        
+                                        MDLabel:
+                                            text: "Вода,Сок:"
+                                            
+                                        MDLabel:
+                                            id: water_summa
+                                            text: "сумма"
+                                            halign: "center"
+                                            size_hint_x: .6
+                                        
+                                    MDBoxLayout:
+                                        orientation: "horizontal"
+                                        md_bg_color: 0.2, 0.2, 0.2, 0.2
+                                        
+                                        MDIconButton:
+                                            icon: "coffee"
+											pos_hint: {"center_y": .5}
+                                        
+                                        MDLabel:
+                                            text: "Чай,Кофе:"
+                                            
+                                        MDLabel:
+                                            id: coffee_summa
+                                            text: "сумма"
+                                            halign: "center"
+                                            size_hint_x: .6
+                                        
+                                    MDBoxLayout:
+                                        orientation: "horizontal"
+                                        MDIconButton:
+                                            icon: "food"
+											pos_hint: {"center_y": .5}
+                                        
+                                        MDLabel:
+                                            text: "Сладости,Прочее:"
+                                            
+                                        MDLabel:
+                                            id: other_summa
+                                            text: "сумма"
+                                            halign: "center"
+                                            size_hint_x: .6
+                                        
+                                MDBoxLayout:
+                                    orientation: 'horizontal'
+                                    md_bg_color: get_color_from_hex(app.color_bar)
+                                    size_hint_y: .13
+                                    padding: "10dp"
+                                    
+                                    AnchorLayout:
+                                
+                                        MDFillRoundFlatIconButton:
+                                            icon: "calculator-variant"
+                                            text: "Подсчитать"
+                                            anchor_y: 'bottom'
+                                            pos_hint: {"center_y": .5}
+                                            theme_text_color: "Custom"
+                                            text_color: "#840E04"
+                                            line_color: 0, 0, 0, 1
+                                            icon_color: 0, 0, 0, 1
+                                            md_bg_color: app.color_bar
+                                            on_release: app.calc_itogo()
+                                         
+                                    MDLabel:
+                                        text: "ИТОГО:"
+                                        halign: "center"
+                                        font_style: "H6"
+                                        
+                                    MDLabel:
+                                        id: itogo_summa
+                                        text: "Сумма"
+                                        halign: "center"
+                                        font_style: "H6"
+                                                       
+                        Tab:
+                            id: tab2
+                            name: 'tab2'
+                            text: f"[size=55][font={fonts[-1]['fn_regular']}]{md_icons['beer-outline']}[/size][/font] Водка"
+
+                            MDBoxLayout:
+                                orientation: 'horizontal'
+                                pos_hint: {"top": 1}
+                                size_hint_y: .103
+                                padding: "10dp"
+                                md_bg_color: get_color_from_hex(app.color_bar)
+                                
+                                MDLabel:
+                                    text: "ИТОГО:"
+                                    halign: "center"
+                                    font_style: "H6"
+                    
+                                MDLabel:
+                                    id: itogo_vodka
+                                    text: "сумма"
+                                    font_style: "H6"
+                    
+								MDIconButton:
+									icon: "ballot-recount"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.col_vo_update(0)
+                                        
+								MDIconButton:
+									icon: "cash-multiple"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.price_update(0)
+                                        
+                            RecycleView:
+                                size_hint_y: .897
+                                
+                                MDList:
+                                    id: content_vodka
+                                    padding: 20, 40
+                                     
+                        Tab:
+                            id: tab3
+                            name: 'tab3'
+                            text: f"[size=55][font={fonts[-1]['fn_regular']}]{md_icons['delete-variant']}[/size][/font] Коньяк"
+                            
+                            MDBoxLayout:
+                                orientation: 'horizontal'
+                                pos_hint: {"top": 1}
+                                size_hint_y: .103
+                                padding: "10dp"
+                                md_bg_color: get_color_from_hex(app.color_bar)
+                                   
+                                MDLabel:
+                                    text: "ИТОГО:"
+                                    halign: "center"
+                                    font_style: "H6"
+                    
+                                MDLabel:
+                                    id: itogo_cognac
+                                    text: "сумма"
+                                    font_style: "H6"
+                                
+								MDIconButton:
+									icon: "ballot-recount"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.col_vo_update(1)
+                                        
+								MDIconButton:
+									icon: "cash-multiple"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.price_update(1)
+                                       
+                            RecycleView:
+                                size_hint_y: .897
+
+                                MDList:
+                                    id: content_cognac
+                                    padding: 20, 40
+                                 
+                        Tab:
+                            id: tab4
+                            name: 'tab4'
+                            text: f"[size=55][font={fonts[-1]['fn_regular']}]{md_icons['glass-cocktail']}[/size][/font] Ликёр,Вермут"
+                        
+                            MDBoxLayout:
+                                orientation: 'horizontal'
+                                pos_hint: {"top": 1}
+                                size_hint_y: .103
+                                padding: "10dp"
+                                md_bg_color: get_color_from_hex(app.color_bar)
+                                   
+                                MDLabel:
+                                    text: "ИТОГО:"
+                                    halign: "center"
+                                    font_style: "H6"
+                    
+                                MDLabel:
+                                    id: itogo_liquor
+                                    text: "сумма"
+                                    font_style: "H6"
+                                
+								MDIconButton:
+									icon: "ballot-recount"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.col_vo_update(2)
+                                        
+								MDIconButton:
+									icon: "cash-multiple"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.price_update(2)
+                                       
+                            RecycleView:
+                                size_hint_y: .897
+
+                                MDList:
+                                    id: content_liquor
+                                    padding: 20, 40
+                                 
+                        Tab:
+                            id: tab5
+                            name: 'tab5'
+                            text: f"[size=55][font={fonts[-1]['fn_regular']}]{md_icons['bottle-soda-classic']}[/size][/font] Слабоалкоголка"
+                        
+                            MDBoxLayout:
+                                orientation: 'horizontal'
+                                pos_hint: {"top": 1}
+                                size_hint_y: .103
+                                padding: "10dp"
+                                md_bg_color: get_color_from_hex(app.color_bar)
+                                
+                                MDLabel:
+                                    text: "ИТОГО:"
+                                    halign: "center"
+                                    font_style: "H6"
+                    
+                                MDLabel:
+                                    id: itogo_low_alcohol
+                                    text: "сумма"
+                                    font_style: "H6"
+                    
+								MDIconButton:
+									icon: "ballot-recount"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.col_vo_update(3)
+                                        
+								MDIconButton:
+									icon: "cash-multiple"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.price_update(3)
+                                       
+                            RecycleView:
+                                size_hint_y: .897
+                                
+                                MDList:
+                                    id: content_low_alcohol
+                                    padding: 20, 40
+                                 
+                        Tab:
+                            id: tab6
+                            name: 'tab6'
+                            text: f"[size=55][font={fonts[-1]['fn_regular']}]{md_icons['glass-wine']}[/size][/font] Вино,Шампанское"
+                        
+                            MDBoxLayout:
+                                orientation: 'horizontal'
+                                pos_hint: {"top": 1}
+                                size_hint_y: .103
+                                padding: "10dp"
+                                md_bg_color: get_color_from_hex(app.color_bar)
+                                
+                                MDLabel:
+                                    text: "ИТОГО:"
+                                    halign: "center"
+                                    font_style: "H6"
+                    
+                                MDLabel:
+                                    id: itogo_wine
+                                    text: "сумма"
+                                    font_style: "H6"
+                    
+								MDIconButton:
+									icon: "ballot-recount"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.col_vo_update(4)
+                                        
+								MDIconButton:
+									icon: "cash-multiple"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.price_update(4)
+                                       
+                            RecycleView:
+                                size_hint_y: .897
+                                
+                                MDList:
+                                    id: content_wine
+                                    padding: 20, 40
+                                 
+                        Tab:
+                            id: tab7
+                            name: 'tab7'
+                            text: f"[size=55][font={fonts[-1]['fn_regular']}]{md_icons['glass-mug-variant']}[/size][/font] Пиво"
+                        
+                            MDBoxLayout:
+                                orientation: 'horizontal'
+                                pos_hint: {"top": 1}
+                                size_hint_y: .103
+                                padding: "10dp"
+                                md_bg_color: get_color_from_hex(app.color_bar)
+                                   
+                                MDLabel:
+                                    text: "ИТОГО:"
+                                    halign: "center"
+                                    font_style: "H6"
+                    
+                                MDLabel:
+                                    id: itogo_beer
+                                    text: "сумма"
+                                    font_style: "H6"
+                                
+								MDIconButton:
+									icon: "ballot-recount"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.col_vo_update(5)
+                                        
+								MDIconButton:
+									icon: "cash-multiple"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.price_update(5)
+                                       
+                            RecycleView:
+                                size_hint_y: .897
+
+                                MDList:
+                                    id: content_beer
+                                    padding: 20, 40
+                                 
+                        Tab:
+                            id: tab8
+                            name: 'tab8'
+                            text: f"[size=55][font={fonts[-1]['fn_regular']}]{md_icons['fish']}[/size][/font] к Пиву"
+                        
+                            MDBoxLayout:
+                                orientation: 'horizontal'
+                                pos_hint: {"top": 1}
+                                size_hint_y: .103
+                                padding: "10dp"
+                                md_bg_color: get_color_from_hex(app.color_bar)
+                                   
+                                MDLabel:
+                                    text: "ИТОГО:"
+                                    halign: "center"
+                                    font_style: "H6"
+                    
+                                MDLabel:
+                                    id: itogo_k_beer
+                                    text: "сумма"
+                                    font_style: "H6"
+                                
+								MDIconButton:
+									icon: "ballot-recount"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.col_vo_update(6)
+                                        
+								MDIconButton:
+									icon: "cash-multiple"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.price_update(6)
+                                       
+                            RecycleView:
+                                size_hint_y: .897
+
+                                MDList:
+                                    id: content_k_beer
+                                    padding: 20, 40
+                                 
+                        Tab:
+                            id: tab9
+                            name: 'tab9'
+                            text: f"[size=55][font={fonts[-1]['fn_regular']}]{md_icons['cup-water']}[/size][/font] Вода,Сок"
+                        
+                            MDBoxLayout:
+                                orientation: 'horizontal'
+                                pos_hint: {"top": 1}
+                                size_hint_y: .103
+                                padding: "10dp"
+                                md_bg_color: get_color_from_hex(app.color_bar)
+                                   
+                                MDLabel:
+                                    text: "ИТОГО:"
+                                    halign: "center"
+                                    font_style: "H6"
+                    
+                                MDLabel:
+                                    id: itogo_water
+                                    text: "сумма"
+                                    font_style: "H6"
+                                
+								MDIconButton:
+									icon: "ballot-recount"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.col_vo_update(7)
+                                        
+								MDIconButton:
+									icon: "cash-multiple"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.price_update(7)
+                                       
+                            RecycleView:
+                                size_hint_y: .897
+
+                                MDList:
+                                    id: content_water
+                                    padding: 20, 40
+                                 
+                        Tab:
+                            id: tab10
+                            name: 'tab10'
+                            text: f"[size=55][font={fonts[-1]['fn_regular']}]{md_icons['coffee']}[/size][/font] Чай,Кофе"
+                        
+                            MDBoxLayout:
+                                orientation: 'horizontal'
+                                pos_hint: {"top": 1}
+                                size_hint_y: .103
+                                padding: "10dp"
+                                md_bg_color: get_color_from_hex(app.color_bar)
+                                   
+                                MDLabel:
+                                    text: "ИТОГО:"
+                                    halign: "center"
+                                    font_style: "H6"
+                    
+                                MDLabel:
+                                    id: itogo_coffee
+                                    text: "сумма"
+                                    font_style: "H6"
+                                
+								MDIconButton:
+									icon: "ballot-recount"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.col_vo_update(8)
+                                        
+								MDIconButton:
+									icon: "cash-multiple"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.price_update(8)
+                                       
+                            RecycleView:
+                                size_hint_y: .897
+
+                                MDList:
+                                    id: content_coffee
+                                    padding: 20, 40
+                                 
+                        Tab:
+                            id: tab11
+                            name: 'tab11'
+                            text: f"[size=55][font={fonts[-1]['fn_regular']}]{md_icons['food']}[/size][/font] Сладости,Прочее"
+                    
+                            MDBoxLayout:
+                                orientation: 'horizontal'
+                                pos_hint: {"top": 1}
+                                size_hint_y: .103
+                                padding: "10dp"
+                                md_bg_color: get_color_from_hex(app.color_bar)
+                                    
+                                MDLabel:
+                                    text: "ИТОГО:"
+                                    halign: "center"
+                                    font_style: "H6"
+                    
+                                MDLabel:
+                                    id: itogo_other
+                                    text: "сумма"
+                                    font_style: "H6"
+                                
+								MDIconButton:
+									icon: "ballot-recount"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.col_vo_update(9)
+                                        
+								MDIconButton:
+									icon: "cash-multiple"
+                                    halign: "right"
+                                    pos_hint: {"center_y": .5}
+									on_release: app.price_update(9)
+                                       
+                            RecycleView:
+                                size_hint_y: .897
+
+                                MDList:
+                                    id: content_other
+                                    padding: 20, 40
+                                 
+			MDScreen:
+                name: "Подсчёткупюр"
+
+                MDBoxLayout:
+                    orientation: "vertical"
+
+					MDToolbar:
+						title: "Подсчёт купюр"
+						elevation: 10
+						height: "58dp"
+						md_bg_color: get_color_from_hex(app.color_toolbar)
+						specific_text_color: get_color_from_hex(app.color_title)
+						left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+
+					MDBoxLayout:
+						orientation: "vertical"
+						padding: "20dp"
+				
+						MDBoxLayout:
+							orientation: "vertical"
+				
+							MDLabel:
+								text: 'купюры'
+								halign: "center"
+
+							MDBoxLayout:
+						
+								MDLabel:
+									text: '1000'
+									halign: "center"
+							
+								MDTextField:
+									id: bills0
+									input_filter: "int"
+									on_focus: app.calc_bills()
+						
+								MDLabel:
+									text: '20'
+									halign: "center"
+							
+								MDTextField:
+									id: bills5
+									input_filter: "int"
+									on_focus: app.calc_bills()
+						
+							MDBoxLayout:
+						
+								MDLabel:
+									text: '500'
+									halign: "center"
+							
+								MDTextField:
+									id: bills1
+									input_filter: "int"
+									on_focus: app.calc_bills()
+						
+								MDLabel:
+									text: '10'
+									halign: "center"
+							
+								MDTextField:
+									id: bills6
+									input_filter: "int"
+									on_focus: app.calc_bills()
+						
+							MDBoxLayout:
+						
+								MDLabel:
+									text: '200'
+									halign: "center"
+							
+								MDTextField:
+									id: bills2
+									input_filter: "int"
+									on_focus: app.calc_bills()
+						
+								MDLabel:
+									text: '5'
+									halign: "center"
+							
+								MDTextField:
+									id: bills7
+									input_filter: "int"
+									on_focus: app.calc_bills()
+						
+							MDBoxLayout:
+						
+								MDLabel:
+									text: '100'
+									halign: "center"
+							
+								MDTextField:
+									id: bills3
+									input_filter: "int"
+									on_focus: app.calc_bills()
+						
+								MDLabel:
+									text: '2'
+									halign: "center"
+							
+								MDTextField:
+									id: bills8
+									input_filter: "int"
+									on_focus: app.calc_bills()
+						
+							MDBoxLayout:
+						
+								MDLabel:
+									text: '50'
+									halign: "center"
+							
+								MDTextField:
+									id: bills4
+									input_filter: "int"
+									on_focus: app.calc_bills()
+						
+								MDLabel:
+									text: '1'
+									halign: "center"
+							
+								MDTextField:
+									id: bills9
+									input_filter: "int"
+									on_focus: app.calc_bills()
+									
+							MDSeparator:
+								padding: "2dp"
+						
+							MDLabel:
+								text: 'металические'
+								halign: "center"
+								
+							MDBoxLayout:
+						
+								MDLabel:
+									text: '10'
+									halign: "center"
+							
+								MDTextField:
+									id: bills10
+									input_filter: "int"
+									on_focus: app.calc_bills()
+						
+								MDLabel:
+									text: '2'
+									halign: "center"
+							
+								MDTextField:
+									id: bills12
+									input_filter: "int"
+									on_focus: app.calc_bills()
+						
+							MDBoxLayout:
+						
+								MDLabel:
+									text: '5'
+									halign: "center"
+							
+								MDTextField:
+									id: bills11
+									input_filter: "int"
+									on_focus: app.calc_bills()
+						
+								MDLabel:
+									text: '1'
+									halign: "center"
+							
+								MDTextField:
+									id: bills13
+									input_filter: "int"
+									on_focus: app.calc_bills()
+									
+							MDBoxLayout:
+						
+								MDLabel:
+									text: '0.5'
+									halign: "center"
+							
+								MDTextField:
+									id: bills14
+									input_filter: "int"
+									on_focus: app.calc_bills()
+						
+								MDLabel:
+									text: '0.1'
+									halign: "center"
+							
+								MDTextField:
+									id: bills15
+									input_filter: "int"
+									on_focus: app.calc_bills()
+								
+					MDBoxLayout:
+						size_hint_y: .12
+						padding: "10dp"
+						md_bg_color: get_color_from_hex(app.color_bar)
+								
+						AnchorLayout:
+								
+							MDFillRoundFlatIconButton:
+								icon: "delete-forever-outline"
+								text: "Очистить"
+								anchor_y: 'bottom'
+								theme_text_color: "Custom"
+								text_color: 0.5, 0, 0, 1
+								line_color: 0, 0, 0, 1
+								icon_color: 0, 0, 0, 1
+								md_bg_color: get_color_from_hex(app.color_bar)
+								on_release: app.clean_bills()
+										
+						MDLabel:
+							text: "ИТОГО:"
+							halign: "right"
+					
+						MDLabel:
+							id: itogo_bills
+							text: "сумма"
+							halign: "right"
+                    
+            MDScreen:
+                name: "сводка"
+
+                MDBoxLayout:
+                    orientation: "vertical"
+
+					MDToolbar:
+						title: "Сводка"
+						elevation: 10
+						height: "58dp"
+						md_bg_color: get_color_from_hex(app.color_toolbar)
+						specific_text_color: get_color_from_hex(app.color_title)
+						left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+
+					MDLabel:
+						text: "сводка в разработке"
+						halign: "center"
+
+            MDScreen:
+                name: "конверты"
+
+                MDBoxLayout:
+                    orientation: "vertical"
+
+					MDToolbar:
+						title: "Конверты"
+						elevation: 10
+						height: "58dp"
+						md_bg_color: get_color_from_hex(app.color_toolbar)
+						specific_text_color: get_color_from_hex(app.color_title)
+						left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+
+					MDLabel:
+						text: "конверты в разработке"
+						halign: "center"
+			
+            MDScreen:
+                name: "Поставщики"
+
+                ScreenManager:
+                    id: screen_manager_post
+
+                    MDScreen:
+                        name: "postav"
+
+                        MDBoxLayout:
+                            orientation: 'vertical'
+
+                            MDToolbar:
+                                title: "Поставщики"
+                                elevation: 10
+                                height: "58dp"
+                                md_bg_color: get_color_from_hex(app.color_toolbar)
+                                specific_text_color: get_color_from_hex(app.color_title)
+                                left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+					            right_action_items: [["account-plus-outline" , lambda x: app.new_post_clean()]]
+
+                            ScrollView:
+
+                                MDList:
+                                    id: con_post
+
+                    MDScreen:
+                        name: "postav_input"
+
+                        MDBoxLayout:
+                            orientation: 'vertical'
+                            
+                            MDToolbar:
+                                id: toolbar
+                                title: "Поставщики"
+                                elevation: 10
+                                height: "58dp"
+                                md_bg_color: get_color_from_hex(app.color_toolbar)
+                                specific_text_color: get_color_from_hex(app.color_title)
+                                left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+
+                            MDBoxLayout:
+                                orientation: 'vertical'
+                                padding: "10dp"
+
+                                Image: 
+                                    size_hint: None, None
+                                    size: "100dp", "100dp"
+                                    source: "data/contacte.png" 
+                                    pos_hint: {'center_x': .5} 
+                                    opacity: .5 
+                
+                                MDBoxLayout:
+                                    orientation: 'vertical'
+                                    padding: "20dp"
+
+                                    MDBoxLayout:
+                                
+                                        MDIconButton:
+                                            icon: 'city'
+                                        MDTextField:
+                                            id: post_org
+                                            hint_text: 'Организация'
+
+                                    MDBoxLayout:
+                                    
+                                        MDIconButton:
+                                            icon: 'account'
+                                        MDTextField:
+                                            id: post_account
+                                            hint_text: 'Представитель'
+                                            
+                                    MDBoxLayout:
+                                    
+                                        MDIconButton:
+                                            icon: 'phone'
+                                        MDTextField:
+                                            id: post_number_phone1
+                                            input_filter: "int"
+                                            max_text_length: 10
+                                            hint_text: 'номер телефона'
+                                            
+                                    MDBoxLayout:
+                                    
+                                        MDIconButton:
+                                            icon: 'phone'
+                                        MDTextField:
+                                            id: post_number_phone2
+                                            input_filter: "int"
+                                            max_text_length: 10
+                                            hint_text: 'номер телефона'
+                                            
+                                    MDBoxLayout:
+                                    
+                                        MDIconButton:
+                                            icon: 'book-edit'
+                                        MDTextField:
+                                            id: post_note
+                                            hint_text: 'заметка'
+
+                                Widget:
+                                    size_hint_y: .4
+
+                        MDFloatingActionButton:
+                            icon: 'arrow-left-bold-outline' 
+                            pos_hint: {'center_x': .2, 'center_y': .1}
+                            on_press: screen_manager_post.current = "postav"
+
+                        MDFloatingActionButton:
+                            id: post_del
+                            icon: 'delete-forever-outline' 
+                            disabled: True
+                            pos_hint: {'center_x': .4, 'center_y': .1}
+                            on_press: app.delete_postavshik()
+                            on_release: screen_manager_post.current = "postav"
+
+                        MDFloatingActionButton:
+                            id: post_edit
+                            icon: 'content-save-edit-outline' 
+                            disabled: True
+                            pos_hint: {'center_x': .6, 'center_y': .1}
+                            on_press: app.upgrade_postavshik()
+                            on_release: screen_manager_post.current = "postav"
+
+                        MDFloatingActionButton:
+                            id: post_new
+                            icon: 'content-save-outline' 
+                            pos_hint: {'center_x': .8, 'center_y': .1}
+                            on_press: app.new_postavshik()
+                            on_release: screen_manager_post.current = "postav"
+
+			MDScreen:
+                name: "море"
+
+                MDFloatLayout:
+                    orientation: "vertical"
+
+					MDToolbar:
+						id: toolbar
+                        pos_hint: {"top": 1}
+						left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+
+                    FitImage: 
+                        source: "data/more.png"
+
+                    MDBoxLayout:
+                        padding: "20dp"
+
+                        MDLabel:
+                            id: lab_more
+                            text: "О море! море!"
+                            pos_hint: {'center_x': .5, 'center_y': .75}
+
+                        MDIconButton:
+                            icon: "beach"
+                            halign: "right"
+                            icon_color: app.theme_cls.primary_color
+                            on_release: app.omore_random()
+					
+        MDNavigationDrawer:
+            id: nav_drawer
+
+            ContentNavigationDrawer:
+                screen_manager: screen_manager
+                nav_drawer: nav_drawer
